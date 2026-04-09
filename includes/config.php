@@ -1,20 +1,48 @@
 <?php
 session_start();
 
-// Database connection - For Local Development
-$host = 'localhost';
-$user = 'root';
-$pass = '';
-$dbname = 'kimaro_electronics';
 
-$conn = mysqli_connect($host, $user, $pass, $dbname);
+/**
+ * Database Configuration for Smart Cashew - TiDB Cloud (Render Ready)
+ */
+
+// Get database settings from environment variables (set on Render)
+$db_host = getenv('DB_HOST') ?: 'gateway01.eu-central-1.prod.aws.tidbcloud.com:4000';
+$db_user = getenv('DB_USER') ?: '2Sta87CGJ1DSRhL.root';
+$db_password = getenv('DB_PASSWORD') ?: 'f0C3i3o33oNhQ1zJ';
+$db_name = getenv('DB_NAME') ?: 'kimaro_electronics';
+
+// Database settings
+define('DB_HOST', $db_host);
+define('DB_USER', $db_user);
+define('DB_PASSWORD', $db_password);
+define('DB_NAME', $db_name);
+
+// Charset
+define('DB_CHARSET', 'utf8mb4');
+define('DB_COLLATE', 'utf8mb4_general_ci');
+
+// SSL is required for TiDB Cloud
+define('MYSQL_CLIENT_FLAGS', MYSQLI_CLIENT_SSL);
+
+// Create connection using MySQLi
+$conn = mysqli_init();
 
 if (!$conn) {
+    die("MySQLi initialization failed");
+}
+
+// Set SSL flags
+mysqli_options($conn, MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, false);
+mysqli_ssl_set($conn, NULL, NULL, NULL, NULL, NULL);
+
+// Connect to database
+if (!mysqli_real_connect($conn, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, 4000, NULL, MYSQLI_CLIENT_SSL)) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
 // Set charset
-mysqli_set_charset($conn, "utf8mb4");
+mysqli_set_charset($conn, DB_CHARSET);
 
 // Site configuration
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
@@ -23,7 +51,6 @@ $base_url = $protocol . $host_url;
 
 define('SITE_NAME', 'Kimaro Computers');
 define('SITE_URL', $base_url);
-
 /**
  * Check if admin is logged in
  * @return bool
