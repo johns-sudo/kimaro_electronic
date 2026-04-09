@@ -122,15 +122,21 @@ if (isset($_POST['edit_product'])) {
     }
 }
 
-// Delete Product
+// Delete Product - FIXED
 if (isset($_GET['delete'])) {
     $id = intval($_GET['delete']);
+    
+    // First delete specifications
+    mysqli_query($conn, "DELETE FROM product_specs WHERE product_id=$id");
+    
+    // Then delete product
     $sql = "DELETE FROM products WHERE id=$id";
     if (mysqli_query($conn, $sql)) {
         echo "<script>alert('Product deleted successfully!'); window.location.href='products.php';</script>";
         exit();
     } else {
-        $error = "Error deleting product";
+        echo "<script>alert('Error deleting product: " . mysqli_error($conn) . "'); window.location.href='products.php';</script>";
+        exit();
     }
 }
 
@@ -270,7 +276,6 @@ $products = mysqli_query($conn, "SELECT * FROM products ORDER BY id DESC");
             overflow: hidden;
             box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             transition: all 0.3s;
-            cursor: pointer;
         }
         
         .product-card:hover {
@@ -285,6 +290,7 @@ $products = mysqli_query($conn, "SELECT * FROM products ORDER BY id DESC");
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            cursor: pointer;
         }
         
         .product-image img {
@@ -350,6 +356,7 @@ $products = mysqli_query($conn, "SELECT * FROM products ORDER BY id DESC");
             font-size: 13px;
             font-weight: 500;
             transition: all 0.2s;
+            display: inline-block;
         }
         
         .btn-view {
@@ -498,6 +505,8 @@ $products = mysqli_query($conn, "SELECT * FROM products ORDER BY id DESC");
             border-radius: 6px;
             cursor: pointer;
             font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
         }
         
         .spec-section {
@@ -546,8 +555,8 @@ $products = mysqli_query($conn, "SELECT * FROM products ORDER BY id DESC");
         
         <div class="products-grid">
             <?php while($product = mysqli_fetch_assoc($products)): ?>
-            <div class="product-card" onclick="viewProduct(<?php echo $product['id']; ?>)">
-                <div class="product-image">
+            <div class="product-card">
+                <div class="product-image" onclick="viewProduct(<?php echo $product['id']; ?>)">
                     <?php if($product['image'] && file_exists("../uploads/".$product['image'])): ?>
                         <img src="../uploads/<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
                     <?php else: ?>
@@ -560,9 +569,9 @@ $products = mysqli_query($conn, "SELECT * FROM products ORDER BY id DESC");
                     <div class="product-price">TZS <?php echo number_format($product['price']); ?></div>
                     <div class="product-stock">📦 Stock: <?php echo $product['stock']; ?> units</div>
                     <div class="product-actions">
-                        <a href="?edit=<?php echo $product['id']; ?>" class="btn-edit" onclick="event.stopPropagation()">✏️ Edit</a>
-                        <a href="?delete=<?php echo $product['id']; ?>" class="btn-delete" onclick="event.stopPropagation(); return confirm('Delete this product?')">🗑️ Delete</a>
-                        <button class="btn-view" onclick="event.stopPropagation(); viewProduct(<?php echo $product['id']; ?>)">👁️ View</button>
+                        <a href="products.php?edit=<?php echo $product['id']; ?>" class="btn-edit">✏️ Edit</a>
+                        <a href="#" class="btn-delete" onclick="deleteProduct(<?php echo $product['id']; ?>, '<?php echo htmlspecialchars($product['name']); ?>')">🗑️ Delete</a>
+                        <button class="btn-view" onclick="viewProduct(<?php echo $product['id']; ?>)">👁️ View</button>
                     </div>
                 </div>
             </div>
@@ -746,7 +755,7 @@ $products = mysqli_query($conn, "SELECT * FROM products ORDER BY id DESC");
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="products.php" class="btn-cancel" style="text-decoration: none;">Cancel</a>
+                    <a href="products.php" class="btn-cancel">Cancel</a>
                     <button type="submit" name="edit_product" class="btn-save">Update Product</button>
                 </div>
             </form>
@@ -760,6 +769,13 @@ $products = mysqli_query($conn, "SELECT * FROM products ORDER BY id DESC");
             window.location.href = 'product_detail.php?id=' + id;
         }
         
+        // Delete product function - FIXED
+        function deleteProduct(id, name) {
+            if (confirm('Are you sure you want to delete product: "' + name + '"? This action cannot be undone!')) {
+                window.location.href = 'products.php?delete=' + id;
+            }
+        }
+        
         // Open Add Modal
         function openAddModal() {
             var modal = document.getElementById('addModal');
@@ -768,6 +784,11 @@ $products = mysqli_query($conn, "SELECT * FROM products ORDER BY id DESC");
                 var form = document.getElementById('addProductForm');
                 if (form) {
                     form.reset();
+                    // Reset specs container to one row
+                    var specsContainer = document.getElementById('specsContainer');
+                    if (specsContainer) {
+                        specsContainer.innerHTML = '<div class="spec-row"><input type="text" name="spec_name[]" placeholder="Specification"><input type="text" name="spec_value[]" placeholder="Value"><button type="button" class="remove-spec" onclick="removeSpec(this)">✖</button></div>';
+                    }
                 }
             }
         }
@@ -815,7 +836,7 @@ $products = mysqli_query($conn, "SELECT * FROM products ORDER BY id DESC");
                 addModal.style.display = 'none';
             }
             if (event.target == editModal) {
-                editModal.style.display = 'none';
+                window.location.href = 'products.php';
             }
         }
     </script>
