@@ -675,7 +675,7 @@ $total_brands = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(DISTINCT br
                         </div>
                     </div>
                 </div>
-                <div class="team-card">
+                <!-- <div class="team-card">
                     <div class="team-image">
                         <i class="fas fa-user-circle"></i>
                     </div>
@@ -712,9 +712,9 @@ $total_brands = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(DISTINCT br
                             <a href="#"><i class="fab fa-linkedin-in"></i></a>
                             <a href="#"><i class="fab fa-twitter"></i></a>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </div> -->
+                <!-- </div>
+            </div> -->
         </div>
     </div>
     
