@@ -739,8 +739,8 @@ $total_brands = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(DISTINCT br
             </div>
             <div class="footer-section">
                 <h3>Mawasiliano</h3>
-                <p><i class="fas fa-phone"></i> +255 782751622</p>
-                <p><i class="fab fa-whatsapp"></i> +255 782751622</p>
+                <p><i class="fas fa-phone"></i> +255 767396078</p>
+                <p><i class="fab fa-whatsapp"></i> +255 767396078</p>
                 <p><i class="fas fa-envelope"></i> kimarojohn82@gmail.com</p>
                 <p><i class="fas fa-map-marker-alt"></i> Dar es Salaam, Tanzania</p>
             </div>
