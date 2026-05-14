@@ -29,7 +29,7 @@ $recent_orders = mysqli_query($conn, "SELECT * FROM orders ORDER BY created_at D
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Dashboard - Kimaro Computers</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -43,6 +43,25 @@ $recent_orders = mysqli_query($conn, "SELECT * FROM orders ORDER BY created_at D
         body {
             font-family: 'Poppins', sans-serif;
             background: #f5f7fb;
+            overflow-x: hidden;
+        }
+        
+        /* Mobile Menu Button */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
         
         /* Sidebar */
@@ -54,7 +73,9 @@ $recent_orders = mysqli_query($conn, "SELECT * FROM orders ORDER BY created_at D
             position: fixed;
             left: 0;
             top: 0;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
         }
         
         .sidebar-header {
@@ -71,6 +92,11 @@ $recent_orders = mysqli_query($conn, "SELECT * FROM orders ORDER BY created_at D
         .sidebar-header h3 {
             font-size: 20px;
             margin-top: 10px;
+        }
+        
+        .sidebar-header p {
+            font-size: 12px;
+            opacity: 0.8;
         }
         
         .sidebar-menu {
@@ -102,6 +128,7 @@ $recent_orders = mysqli_query($conn, "SELECT * FROM orders ORDER BY created_at D
             margin-left: 280px;
             padding: 20px;
             min-height: 100vh;
+            transition: all 0.3s ease;
         }
         
         /* Top Bar */
@@ -114,6 +141,8 @@ $recent_orders = mysqli_query($conn, "SELECT * FROM orders ORDER BY created_at D
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            flex-wrap: wrap;
+            gap: 15px;
         }
         
         .top-bar h2 {
@@ -128,6 +157,7 @@ $recent_orders = mysqli_query($conn, "SELECT * FROM orders ORDER BY created_at D
             display: flex;
             align-items: center;
             gap: 20px;
+            flex-wrap: wrap;
         }
         
         .user-info span {
@@ -210,11 +240,13 @@ $recent_orders = mysqli_query($conn, "SELECT * FROM orders ORDER BY created_at D
         
         .orders-table {
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 500px;
         }
         
         th, td {
@@ -242,25 +274,127 @@ $recent_orders = mysqli_query($conn, "SELECT * FROM orders ORDER BY created_at D
             color: #856404;
         }
         
+        /* Overlay for mobile */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            transition: all 0.3s ease;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        
+        /* Responsive Styles */
         @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
             .sidebar {
                 left: -280px;
             }
+            
+            .sidebar.open {
+                left: 0;
+            }
+            
             .main-content {
                 margin-left: 0;
+                padding: 15px;
+                padding-top: 70px;
             }
+            
             .stats-grid {
                 grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .top-bar {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .top-bar h2 {
+                font-size: 20px;
+            }
+            
+            .user-info {
+                justify-content: center;
+            }
+            
+            .stat-number {
+                font-size: 28px;
+            }
+            
+            .stat-icon {
+                font-size: 40px;
+            }
+            
+            .recent-orders {
+                padding: 15px;
+            }
+            
+            .recent-orders h3 {
+                font-size: 18px;
+            }
+            
+            th, td {
+                padding: 8px;
+                font-size: 12px;
+            }
+        }
+        
+        /* Small phones */
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 10px;
+                padding-top: 60px;
+            }
+            
+            .top-bar {
+                padding: 15px;
+            }
+            
+            .stat-card {
+                padding: 18px;
+            }
+            
+            .stat-number {
+                font-size: 24px;
+            }
+            
+            .logout-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
+            .user-info span {
+                font-size: 14px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="sidebar">
+    <!-- Mobile Menu Toggle Button -->
+    <button class="menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Overlay for mobile -->
+    <div class="overlay" onclick="closeSidebar()"></div>
+    
+    <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <i class="fas fa-microchip"></i>
             <h3>Kimaro Computers</h3>
-            <p style="font-size: 12px; opacity: 0.8;">Admin Panel</p>
+            <p>Admin Panel</p>
         </div>
         <div class="sidebar-menu">
             <a href="dashboard.php" class="active">
@@ -278,11 +412,11 @@ $recent_orders = mysqli_query($conn, "SELECT * FROM orders ORDER BY created_at D
         </div>
     </div>
     
-    <div class="main-content">
+    <div class="main-content" id="mainContent">
         <div class="top-bar">
             <h2><i class="fas fa-chart-line"></i> Dashboard</h2>
             <div class="user-info">
-                <span><i class="fas fa-user-circle"></i> <?php echo $admin_name; ?></span>
+                <span><i class="fas fa-user-circle"></i> <?php echo htmlspecialchars($admin_name); ?></span>
                 <a href="logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </div>
@@ -323,23 +457,69 @@ $recent_orders = mysqli_query($conn, "SELECT * FROM orders ORDER BY created_at D
             <div class="orders-table">
                 <table>
                     <thead>
-                        <tr><th>ID</th><th>Customer</th><th>Email</th><th>Quantity</th><th>Status</th><th>Date</th></tr>
+                        <tr>
+                            <th>ID</th>
+                            <th>Customer</th>
+                            <th>Email</th>
+                            <th>Qty</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
                     </thead>
                     <tbody>
-                        <?php while($order = mysqli_fetch_assoc($recent_orders)): ?>
-                        <tr>
-                            <td>#<?php echo $order['id']; ?></td>
-                            <td><?php echo $order['customer_name']; ?></td>
-                            <td><?php echo $order['customer_email']; ?></td>
-                            <td><?php echo $order['quantity']; ?></td>
-                            <td><span class="status-badge status-<?php echo $order['status']; ?>"><?php echo $order['status']; ?></span></td>
-                            <td><?php echo date('d/m/Y', strtotime($order['created_at'])); ?></td>
-                        </tr>
-                        <?php endwhile; ?>
+                        <?php if(mysqli_num_rows($recent_orders) > 0): ?>
+                            <?php while($order = mysqli_fetch_assoc($recent_orders)): ?>
+                            <tr>
+                                <td>#<?php echo $order['id']; ?></td>
+                                <td><?php echo htmlspecialchars($order['customer_name']); ?></td>
+                                <td><?php echo htmlspecialchars($order['customer_email']); ?></td>
+                                <td><?php echo $order['quantity']; ?></td>
+                                <td><span class="status-badge status-<?php echo $order['status']; ?>"><?php echo ucfirst($order['status']); ?></span></td>
+                                <td><?php echo date('d/m/Y', strtotime($order['created_at'])); ?></td>
+                            </tr>
+                            <?php endwhile; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="6" style="text-align: center;">No orders found</td>
+                            </tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+    
+    <script>
+        // Toggle sidebar on mobile
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var overlay = document.querySelector('.overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+        
+        // Close sidebar
+        function closeSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var overlay = document.querySelector('.overlay');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+        
+        // Close sidebar when window is resized above mobile breakpoint
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                closeSidebar();
+            }
+        });
+        
+        // Prevent body scroll when sidebar is open on mobile
+        document.addEventListener('touchmove', function(e) {
+            var sidebar = document.getElementById('sidebar');
+            if (sidebar.classList.contains('open') && e.target.closest('.sidebar') === null) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    </script>
 </body>
 </html>
