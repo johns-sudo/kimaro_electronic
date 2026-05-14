@@ -415,10 +415,10 @@ $recent_orders = mysqli_query($conn, "SELECT * FROM orders ORDER BY created_at D
     <div class="main-content" id="mainContent">
         <div class="top-bar">
             <h2><i class="fas fa-chart-line"></i> Dashboard</h2>
-            <div class="user-info">
+            <!-- <div class="user-info">
                 <span><i class="fas fa-user-circle"></i> <?php echo htmlspecialchars($admin_name); ?></span>
                 <a href="logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            </div>
+            </div> -->
         </div>
         
         <div class="stats-grid">
