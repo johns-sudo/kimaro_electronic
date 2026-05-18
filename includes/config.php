@@ -1,14 +1,16 @@
 <?php
 session_start();
 
-// Database connection
+// Define database credentials
 $host = 'localhost';
 $user = 'root';
-$pass = '';
-$dbname = 'kimaro_electronics';
+$password = '';
+$database = 'kimaro_electronics';
 
-$conn = mysqli_connect($host, $user, $pass, $dbname);
+// Create connection
+$conn = mysqli_connect($host, $user, $password, $database);
 
+// Check connection
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
