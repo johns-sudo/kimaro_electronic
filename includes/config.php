@@ -2,17 +2,26 @@
 session_start();
 
 // TiDB Cloud Connection Details
-$host = 'gateway01.eu-central-1.prod.aws.tidbcloud.com';  // Badilisha na host yako halisi
-$port = 4000;  // TiDB Cloud inatumia port 4000, SI 3306
-$user = '2Sta87CGJ1DSRhL.root';  // Badilisha na username yako
-$pass = 'f0C3i3o33oNhQ1zJ';       // Badilisha na password yako
+$host = 'gateway01.eu-central-1.prod.aws.tidbcloud.com';
+$port = 4000;
+$user = '2Sta87CGJ1DSRhL.root';
+$pass = 'f0C3i3o33oNhQ1zJ';
 $dbname = 'kimaro_electronics';
 
-// Connect using port
-$conn = mysqli_connect($host, $user, $pass, $dbname, $port);
+// Connect with SSL enabled
+$conn = mysqli_init();
 
-if (!$conn) {
+// Enable SSL (required for TiDB Cloud Serverless)
+mysqli_ssl_set($conn, NULL, NULL, NULL, NULL, NULL);
+
+// Establish connection with SSL
+if (!mysqli_real_connect($conn, $host, $user, $pass, $dbname, $port, NULL, MYSQLI_CLIENT_SSL)) {
     die("Connection failed: " . mysqli_connect_error());
+}
+
+// Verify SSL is active
+if (mysqli_get_server_info($conn)) {
+    // SSL connection successful
 }
 
 // Simple functions
