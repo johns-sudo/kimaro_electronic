@@ -1,16 +1,16 @@
 <?php
 session_start();
 
-// Define database credentials
-$host = 'localhost';
-$user = 'root';
-$password = '';
-$database = 'kimaro_electronics';
+// TiDB Cloud Connection Details
+$host = 'gateway01.eu-central-1.prod.aws.tidbcloud.com';  // Badilisha na host yako halisi
+$port = 4000;  // TiDB Cloud inatumia port 4000, SI 3306
+$user = '2Sta87CGJ1DSRhL.root';  // Badilisha na username yako
+$pass = '';       // Badilisha na password yako
+$dbname = 'kimaro_electronics';
 
-// Create connection
-$conn = mysqli_connect($host, $user, $password, $database);
+// Connect using port
+$conn = mysqli_connect($host, $user, $pass, $dbname, $port);
 
-// Check connection
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
