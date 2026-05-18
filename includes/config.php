@@ -5,7 +5,7 @@ session_start();
 $host = 'gateway01.eu-central-1.prod.aws.tidbcloud.com';  // Badilisha na host yako halisi
 $port = 4000;  // TiDB Cloud inatumia port 4000, SI 3306
 $user = '2Sta87CGJ1DSRhL.root';  // Badilisha na username yako
-$pass = '';       // Badilisha na password yako
+$pass = 'f0C3i3o33oNhQ1zJ';       // Badilisha na password yako
 $dbname = 'kimaro_electronics';
 
 // Connect using port
