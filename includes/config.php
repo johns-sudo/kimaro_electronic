@@ -2,21 +2,23 @@
 session_start();
 
 // TiDB Cloud Connection Details
-$host = 'gateway01.eu-central-1.prod.aws.tidbcloud.com:4000';  // Port iko hapa!
+$host = 'gateway01.eu-central-1.prod.aws.tidbcloud.com:4000';  // Port ndani ya host
 $user = '2Sta87CGJ1DSRhL.root';
 $pass = 'f0C3i3o33oNhQ1zJ';
 $dbname = 'kimaro_electronics';
 
-// Connect - port iko ndani ya host, hakuna parameter ya 5th
-$conn = mysqli_connect($host, $user, $pass, $dbname);
+// Connect with SSL
+$conn = mysqli_init();
+mysqli_ssl_set($conn, NULL, NULL, NULL, NULL, NULL);
 
-if (!$conn) {
+// Host tayari ina port, so usiweke port parameter tena
+if (!mysqli_real_connect($conn, $host, $user, $pass, $dbname, 3306, NULL, MYSQLI_CLIENT_SSL)) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-echo "Connected successfully!";
+echo "✅ Connected successfully!";
 
-// Simple functions
+// Simple functions (hazibadiliki)
 function isLoggedIn() {
     return isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true;
 }
@@ -31,14 +33,9 @@ function escape($data) {
     return mysqli_real_escape_string($conn, htmlspecialchars(trim($data)));
 }
 
-// Get all brands
 function getBrands() {
     global $conn;
     $result = mysqli_query($conn, "SELECT * FROM brands ORDER BY name");
-    if (!$result) {
-        echo "Query error: " . mysqli_error($conn);
-        return [];
-    }
     $brands = [];
     while($row = mysqli_fetch_assoc($result)) {
         $brands[] = $row;
