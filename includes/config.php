@@ -16,7 +16,7 @@ if (!mysqli_real_connect($conn, $host, $user, $pass, $dbname, 3306, NULL, MYSQLI
     die("Connection failed: " . mysqli_connect_error());
 }
 
-echo "✅ Connected successfully!";
+// echo "✅ Connected successfully!";
 
 // Simple functions (hazibadiliki)
 function isLoggedIn() {
