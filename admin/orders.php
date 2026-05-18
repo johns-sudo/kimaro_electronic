@@ -46,7 +46,7 @@ while($row = mysqli_fetch_assoc($result)) {
     $stats[$row['status']] = $row['count'];
 }
 
-// Get admin name
+// Get admin name - handle both possible session variables
 $admin_name = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_SESSION['admin_name']) ? $_SESSION['admin_name'] : 'Admin');
 ?>
 
@@ -54,8 +54,8 @@ $admin_name = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_SE
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Orders Management - Kimaro Computers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders Management - Kimaro Electronics</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
@@ -69,24 +69,6 @@ $admin_name = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_SE
             background: #f5f7fa;
         }
         
-        /* Mobile Menu Button */
-        .menu-toggle {
-            display: none;
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 1001;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            color: white;
-            border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            font-size: 20px;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        
         .sidebar {
             position: fixed;
             left: 0;
@@ -96,9 +78,7 @@ $admin_name = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_SE
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
             box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-            z-index: 1000;
-            transition: all 0.3s ease;
-            overflow-y: auto;
+            z-index: 100;
         }
         
         .sidebar-header {
@@ -157,24 +137,6 @@ $admin_name = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_SE
             margin-left: 280px;
             padding: 20px;
             min-height: 100vh;
-            transition: all 0.3s ease;
-        }
-        
-        /* Overlay for mobile */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
-            transition: all 0.3s ease;
-        }
-        
-        .overlay.active {
-            display: block;
         }
         
         .top-bar {
@@ -186,8 +148,6 @@ $admin_name = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_SE
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            flex-wrap: wrap;
-            gap: 15px;
         }
         
         .top-bar h2 {
@@ -206,7 +166,6 @@ $admin_name = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_SE
             display: flex;
             align-items: center;
             gap: 20px;
-            flex-wrap: wrap;
         }
         
         .user-info span {
@@ -266,6 +225,7 @@ $admin_name = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_SE
             border-left: 4px solid #e74c3c;
         }
         
+        /* Stats Cards */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -303,6 +263,7 @@ $admin_name = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_SE
             margin-top: 5px;
         }
         
+        /* Orders Table */
         .orders-container {
             background: white;
             border-radius: 12px;
@@ -321,13 +282,11 @@ $admin_name = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_SE
         
         .orders-table {
             overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 800px;
         }
         
         th, td {
@@ -414,74 +373,31 @@ $admin_name = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_SE
             background: #2980b9;
         }
         
-        /* Responsive Styles */
         @media (max-width: 768px) {
-            .menu-toggle {
-                display: block;
-            }
-            
             .sidebar {
                 left: -280px;
             }
             
-            .sidebar.open {
-                left: 0;
-            }
-            
             .main-content {
                 margin-left: 0;
-                padding: 15px;
-                padding-top: 70px;
-            }
-            
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-            }
-            
-            .top-bar {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .top-bar h2 {
-                font-size: 20px;
-            }
-            
-            .user-info {
-                justify-content: center;
             }
             
             th, td {
                 padding: 10px;
                 font-size: 12px;
             }
-        }
-        
-        @media (max-width: 480px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
             
-            .stat-number {
-                font-size: 24px;
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
 </head>
 <body>
-    <!-- Mobile Menu Toggle Button -->
-    <button class="menu-toggle" onclick="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-    </button>
-    
-    <!-- Overlay for mobile -->
-    <div class="overlay" onclick="closeSidebar()"></div>
-    
-    <div class="sidebar" id="sidebar">
+    <div class="sidebar">
         <div class="sidebar-header">
             <i class="fas fa-laptop-code"></i>
-            <h3>Kimaro Computers</h3>
+            <h3>Kimaro Electronics</h3>
             <p>Admin Panel</p>
         </div>
         <div class="sidebar-menu">
@@ -500,7 +416,7 @@ $admin_name = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_SE
         </div>
     </div>
     
-    <div class="main-content" id="mainContent">
+    <div class="main-content">
         <div class="top-bar">
             <h2>
                 <i class="fas fa-shopping-cart"></i> 
@@ -509,7 +425,7 @@ $admin_name = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_SE
             <div class="user-info">
                 <span>
                     <i class="fas fa-user-circle"></i> 
-                    <?php echo htmlspecialchars($admin_name); ?>
+                    <?php echo $admin_name; ?>
                 </span>
                 <a href="logout.php" class="logout-btn">
                     <i class="fas fa-sign-out-alt"></i> Logout
@@ -576,13 +492,6 @@ $admin_name = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_SE
                         <?php if(mysqli_num_rows($orders) > 0): ?>
                             <?php while($order = mysqli_fetch_assoc($orders)): 
                                 $total = ($order['product_price'] ? $order['product_price'] : 0) * $order['quantity'];
-                                // Safe date formatting
-                                $order_date = '';
-                                if (!empty($order['created_at']) && $order['created_at'] != '0000-00-00 00:00:00') {
-                                    $order_date = date('d/m/Y H:i', strtotime($order['created_at']));
-                                } else {
-                                    $order_date = 'Date not available';
-                                }
                             ?>
                             <tr>
                                 <td>#<?php echo $order['id']; ?></td>
@@ -590,7 +499,7 @@ $admin_name = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_SE
                                     <strong><?php echo htmlspecialchars($order['customer_name']); ?></strong><br>
                                     <small><?php echo htmlspecialchars($order['customer_email']); ?></small><br>
                                     <?php if($order['customer_phone']): ?>
-                                        <small><?php echo htmlspecialchars($order['customer_phone']); ?></small>
+                                        <small><?php echo $order['customer_phone']; ?></small>
                                     <?php endif; ?>
                                 </td>
                                 <td>
@@ -616,7 +525,7 @@ $admin_name = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_SE
                                         <input type="hidden" name="update_status" value="1">
                                     </form>
                                 </td>
-                                <td><?php echo $order_date; ?></td>
+                                <td><?php echo date('d/m/Y H:i', strtotime($order['created_at'])); ?></td>
                                 <td>
                                     <button onclick="deleteOrder(<?php echo $order['id']; ?>)" class="btn-delete-order">
                                         <i class="fas fa-trash"></i> Delete
@@ -644,32 +553,9 @@ $admin_name = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_SE
     </div>
     
     <script>
-        // Toggle sidebar on mobile
-        function toggleSidebar() {
-            var sidebar = document.getElementById('sidebar');
-            var overlay = document.querySelector('.overlay');
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('active');
-        }
-        
-        // Close sidebar
-        function closeSidebar() {
-            var sidebar = document.getElementById('sidebar');
-            var overlay = document.querySelector('.overlay');
-            sidebar.classList.remove('open');
-            overlay.classList.remove('active');
-        }
-        
-        // Close sidebar when window is resized above mobile breakpoint
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                closeSidebar();
-            }
-        });
-        
         function deleteOrder(id) {
             if(confirm('Are you sure you want to delete this order? This action cannot be undone.')) {
-                window.location.href = 'orders.php?delete=' + id;
+                window.location.href = `orders.php?delete=${id}`;
             }
         }
         

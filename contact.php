@@ -639,12 +639,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <!-- Contact Action Buttons -->
                 <div class="contact-actions">
                     <div class="contact-buttons">
-                        <a href="https://wa.me/255782751622?text=Habari%2C%20Nina%20swali%20kuhusu%20bidhaa%20za%20kompyuta" 
+                        <a href="https://wa.me/255123456789?text=Habari%2C%20Nina%20swali%20kuhusu%20bidhaa%20za%20kompyuta" 
                            class="btn-whatsapp" target="_blank">
                             <i class="fab fa-whatsapp fa-lg"></i> 
                             WhatsApp
                         </a>
-                        <a href="tel:+255782751622" class="btn-call">
+                        <a href="tel:+255123456789" class="btn-call">
                             <i class="fas fa-phone-alt fa-lg"></i> 
                             Piga Simu
                         </a>

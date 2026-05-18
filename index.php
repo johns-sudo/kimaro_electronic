@@ -722,8 +722,8 @@ $categories = [
             </div>
             <div class="footer-section">
                 <h3>Mawasiliano</h3>
-                <p><i class="fas fa-phone"></i> +255 782751622</p>
-                <p><i class="fas fa-envelope"></i> kimarojohn92@gmail.com</p>
+                <p><i class="fas fa-phone"></i> +255 XXX XXX XXX</p>
+                <p><i class="fas fa-envelope"></i> info@kimarocomputers.co.tz</p>
                 <p><i class="fas fa-map-marker-alt"></i> Dar es Salaam, Tanzania</p>
             </div>
             <div class="footer-section">
@@ -734,7 +734,7 @@ $categories = [
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 Kimaro Computers. Haki zote zimehifadhiwa. | Imetengenezwa na J col</p>
+            <p>&copy; 2024 Kimaro Computers. Haki zote zimehifadhiwa. | Imetengenezwa kwa <i class="fas fa-heart" style="color: #ffc107;"></i> Tanzania</p>
         </div>
     </footer>
     

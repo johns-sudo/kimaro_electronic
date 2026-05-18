@@ -489,8 +489,8 @@ $specs = mysqli_query($conn, "SELECT * FROM product_specs WHERE product_id = $id
     </div>
     
     <footer class="footer">
-        <p>&copy; 2026 Kimaro Electronics. All rights reserved.</p>
-        <p>📍 Dar es Salaam, Tanzania | 📞 +255 782751622</p>
+        <p>&copy; 2024 Kimaro Electronics. All rights reserved.</p>
+        <p>📍 Dar es Salaam, Tanzania | 📞 +255 XXX XXX XXX</p>
     </footer>
     
     <script>

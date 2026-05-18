@@ -190,7 +190,7 @@ require_once 'includes/config.php';
     </div>
     
     <footer class="footer">
-        <p>&copy; 2026 Kimaro Electronics. All rights reserved.</p>
+        <p>&copy; 2024 Kimaro Electronics. All rights reserved.</p>
     </footer>
 </body>
 </html>

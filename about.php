@@ -569,6 +569,7 @@ $total_brands = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(DISTINCT br
         <!-- About Story -->
         <div class="about-content">
             <div class="about-text">
+                <h2>Hadithi Yetu</h2>
                 <div class="swahili-quote">
                     <i class="fas fa-quote-left"></i> "Teknolojia inayowezesha, Ubora unaoaminika"
                 </div>
@@ -667,7 +668,7 @@ $total_brands = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(DISTINCT br
                         <i class="fas fa-user-circle"></i>
                     </div>
                     <div class="team-info">
-                        <h3>Kimaro </h3>
+                        <h3>Kimaro Joseph</h3>
                         <p>Founder & CEO</p>
                         <div class="team-social">
                             <a href="#"><i class="fab fa-linkedin-in"></i></a>
@@ -675,12 +676,12 @@ $total_brands = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(DISTINCT br
                         </div>
                     </div>
                 </div>
-                <!-- <div class="team-card">
+                <div class="team-card">
                     <div class="team-image">
                         <i class="fas fa-user-circle"></i>
                     </div>
                     <div class="team-info">
-                        <h3>Crespo</h3>
+                        <h3>Sarah Mwakyusa</h3>
                         <p>Operations Manager</p>
                         <div class="team-social">
                             <a href="#"><i class="fab fa-linkedin-in"></i></a>
@@ -693,7 +694,7 @@ $total_brands = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(DISTINCT br
                         <i class="fas fa-user-circle"></i>
                     </div>
                     <div class="team-info">
-                        <h3>Lawi Rashid</h3>
+                        <h3>John Mhina</h3>
                         <p>Technical Specialist</p>
                         <div class="team-social">
                             <a href="#"><i class="fab fa-linkedin-in"></i></a>
@@ -706,15 +707,15 @@ $total_brands = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(DISTINCT br
                         <i class="fas fa-user-circle"></i>
                     </div>
                     <div class="team-info">
-                        <h3>robeth</h3>
+                        <h3>Grace Mushi</h3>
                         <p>Customer Support</p>
                         <div class="team-social">
                             <a href="#"><i class="fab fa-linkedin-in"></i></a>
                             <a href="#"><i class="fab fa-twitter"></i></a>
                         </div>
-                    </div> -->
-                <!-- </div>
-            </div> -->
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -739,9 +740,9 @@ $total_brands = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(DISTINCT br
             </div>
             <div class="footer-section">
                 <h3>Mawasiliano</h3>
-                <p><i class="fas fa-phone"></i> +255 782751622</p>
-                <p><i class="fab fa-whatsapp"></i> +255 7682751622</p>
-                <p><i class="fas fa-envelope"></i> kimarojohn82@gmail.com</p>
+                <p><i class="fas fa-phone"></i> +255 123 456 789</p>
+                <p><i class="fab fa-whatsapp"></i> +255 123 456 789</p>
+                <p><i class="fas fa-envelope"></i> info@kimarocomputers.co.tz</p>
                 <p><i class="fas fa-map-marker-alt"></i> Dar es Salaam, Tanzania</p>
             </div>
             <div class="footer-section">
@@ -752,7 +753,7 @@ $total_brands = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(DISTINCT br
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 Kimaro Computers. Haki zote zimehifadhiwa. | Imetengenezwa na J col</p>
+            <p>&copy; 2024 Kimaro Computers. Haki zote zimehifadhiwa. | Imetengenezwa kwa <i class="fas fa-heart" style="color: #ffc107;"></i> Tanzania</p>
         </div>
     </footer>
     
